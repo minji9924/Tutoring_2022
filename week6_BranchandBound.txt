@@ -1,0 +1,49 @@
+Branch and Bound는 '최적의 경우'를 찾는 알고리즘 이다. 
+Greedy Approach와는 다르게 최소한의 'bound'를 정해두고 범위를 벗어나는 값들을 branch 해가면서 결과를 계산한다.
+Branch and Bound 방식으로 풀 수 있는 가장 대표적인 문제로는 0/1 Knapsack가 있다. 
+0/1 Knapsack 문제를 Branch and Bound 방식으로 풀기 위해서는 Breadth-First-Search 알고리즘의 특정한 방식인 Best-First Search 알고리즘을 사용한다. 
+해당 알고리즘의 pseudo-code는 다음과 같다
+
+
+void breadth_first_search(tree T) {
+	queue_of_node Q;
+	node u, v;
+	initialize(Q); // Initialize Q to be empty	
+	v = root of T; 
+	visit v; 
+	enqueue(Q,v);
+	while(!empty(Q)) {
+		dequeue(Q,v);
+		for(each child u of v) {
+		visit u; 
+		enqueue(Q,u);
+		}
+	}
+}
+
+해당 문제를 best first search 방식으로 푸는 pseudo code는 다음과 같다. 
+
+void knapsack3(int n, const int p[], cont int w[], int W, int &maxprofit){
+	queue_of_node PQ; node u, v;
+	initialize(PQ);
+	v.level =0; v.profit = 0; v.weight = 0; v.bound = bound(v);
+	maxprofit = 0;
+	insert (PQ, v);
+
+	while (!empty(Q)) {
+		remove(PQ, v);
+		if(v.bound > maxprofit) {
+			u.level = v.level+1;
+			u.profit = v.profit + p[u.level];
+			u.weight = v.weight + w[u.level];
+		if ((u.weight <= W) && (u.profit > maxprofit)) 
+			maxprofit = u.profit;
+		u.bound = bound(u);
+		if (bound(u) > maxprofit) insert (PQ, u);
+		u.weight = v.weight; // Set u to the child 
+		u.profit = v.profit; // that does not include
+		u.bound = bound(u); // the next item.
+		if (u.bound > maxprofit) insert (PQ, u);
+		} 
+	}
+}
